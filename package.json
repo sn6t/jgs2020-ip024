@@ -1,12 +1,16 @@
 {
-  "name": "socket-chat-example",
+  "name": "jgs2020-ip024",
   "version": "0.0.1",
-  "description": "my first socket.io app",
+  "description": "Japan GUIDE/SHARE 2020 IP-024",
   "dependencies": {
-    "express": "^4.15.2",
-    "socket.io": "^1.7.3"
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
   },
   "scripts": {
     "start": "node index.js"
+  },
+  "engines": {
+    "node": "13.1.0",
+    "npm": "6.12.1"
   }
 }
