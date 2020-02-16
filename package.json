@@ -4,7 +4,8 @@
   "description": "Japan GUIDE/SHARE 2020 IP-024",
   "dependencies": {
     "express": "^4.17.1",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "basic-auth-connect": "1.0.0"
   },
   "scripts": {
     "start": "node index.js"
