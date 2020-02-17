@@ -57,13 +57,6 @@
         text-decoration: none;
       }
     </style>
-    <script>
-      function thumbsup_click(message_id) {
-        console.log(message_id);
-
-        //$('#' + message_id).
-      }
-    </script>
   </head>
   <body>
     <ul id="messages"></ul>
@@ -71,15 +64,28 @@
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.js"
+      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+      crossorigin="anonymous"
+    ></script>
     <script>
       $(function() {
         var socket = io();
+
+        // like button is clicked
+        $(document).on("click", "#thumbs_up", function() {
+          alert("clicked!");
+        });
+
+        // chat messge is submitted
         $("form").submit(function() {
           socket.emit("chat message", $("#m").val());
           $("#m").val("");
           return false;
         });
+
+        // chat message is received
         socket.on("chat message", function(msg) {
           var now = new Date();
           var now_utc = Date.now();
@@ -93,9 +99,7 @@
               now.toLocaleTimeString() +
               "</span>) <span class='message'>" +
               msg +
-              "</span> <a href='javascript:void(0)' class='thumbs_up_disabled' onclick='thumbsup_click(" +
-              now_id +
-              ", arguments[0])'><span class='thumbs_up'>&#x1f44d;</span></a></li>"
+              "</span> <span class='thumbs'><button class='thumbs_up_disabled' id='thumbs_up'>&#x1f44d;</button></span></li>"
           );
           window.scrollTo(0, document.body.scrollHeight);
         });
