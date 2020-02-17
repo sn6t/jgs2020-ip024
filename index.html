@@ -46,14 +46,24 @@
       }
       .thumbs_up_disabled {
         filter: grayscale(100%);
+        text-decoration: none;
       }
       .thumbs_up_disabled:hover {
         filter: grayscale(0%);
+        text-decoration: none;
       }
       .thumbs_up_enabled {
         filter: grayscale(0%);
+        text-decoration: none;
       }
     </style>
+    <script>
+      function thumbsup_click(message_id) {
+        console.log(message_id);
+
+        //$('#' + message_id).
+      }
+    </script>
   </head>
   <body>
     <ul id="messages"></ul>
@@ -71,13 +81,21 @@
           return false;
         });
         socket.on("chat message", function(msg) {
-          var now = Date.now();
+          var now = new Date();
+          var now_utc = Date.now();
+          var now_id = now_utc.toString();
           $("#messages").append(
             "<li id='" +
-              now.toString() +
-              "'>" +
+              now_id +
+              "'>(<span class='date'>" +
+              now.toLocaleDateString() +
+              " " +
+              now.toLocaleTimeString() +
+              "</span>) <span class='message'>" +
               msg +
-              "&nbsp;<span id='thumbs_up' class='thumbs_up_disabled'>&#x1f44d;</span></li>"
+              "</span> <a href='javascript:void(0)' class='thumbs_up_disabled' onclick='thumbsup_click(" +
+              now_id +
+              ", arguments[0])'><span class='thumbs_up'>&#x1f44d;</span></a></li>"
           );
           window.scrollTo(0, document.body.scrollHeight);
         });
