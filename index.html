@@ -44,6 +44,15 @@
       #messages {
         margin-bottom: 40px;
       }
+      .thumbs_up_disabled {
+        filter: grayscale(100%);
+      }
+      .thumbs_up_disabled:hover {
+        filter: grayscale(0%);
+      }
+      .thumbs_up_enabled {
+        filter: grayscale(0%);
+      }
     </style>
   </head>
   <body>
@@ -64,7 +73,11 @@
         socket.on("chat message", function(msg) {
           var now = Date.now();
           $("#messages").append(
-            "<li id='" + now.toString() + "'>" + msg + "</li>"
+            "<li id='" +
+              now.toString() +
+              "'>" +
+              msg +
+              "&nbsp;<span id='thumbs_up' class='thumbs_up_disabled'>&#x1f44d;</span></li>"
           );
           window.scrollTo(0, document.body.scrollHeight);
         });
