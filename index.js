@@ -19,8 +19,8 @@ io.on("connection", function(socket) {
     io.emit("thumbs up", msg);
   });
 
-  socket.on("thinking face", function(msg) {
-    io.emit("thinking face", msg);
+  socket.on("question", function(msg) {
+    io.emit("question", msg);
   });
 });
 

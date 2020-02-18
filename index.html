@@ -54,12 +54,12 @@
         filter: grayscale(0%);
         border-style: none;
       }
-      .thinking_face_disabled {
+      .question_disabled {
         background-color: Transparent;
         filter: grayscale(100%);
         border-style: none;
       }
-      .thinking_face_disabled:hover {
+      .question_disabled:hover {
         background-color: Transparent;
         filter: grayscale(0%);
         border-style: none;
@@ -90,9 +90,9 @@
           socket.emit("thumbs up", $(this).data("msg"));
         });
 
-        // thinking face button is clicked
-        $(document).on("click", ".thinking_face_button", function() {
-          socket.emit("thinking face", $(this).data("msg"));
+        // question button is clicked
+        $(document).on("click", ".question_button", function() {
+          socket.emit("question", $(this).data("msg"));
         });
 
         // chat messge is submitted
@@ -118,9 +118,9 @@
               "<span class='thumbs'><button class='thumbs_up_disabled thumbs_up_button' data-msg='" +
               msg +
               "' title='Thumbs Up Button'>&#x1f44d;</button></span>" +
-              "<span class='thinking'><button class='thinking_face_disabled thinking_face_button' data-msg='" +
+              "<span class='question'><button class='question_disabled question_button' data-msg='" +
               msg +
-              "' title='Thinking Face Button'>&#x1f914;</button></span></li>"
+              "' title='Question Button'>&#x2753;</button></span></li>"
           );
           window.scrollTo(0, document.body.scrollHeight);
         });
@@ -132,10 +132,10 @@
           );
           window.scrollTo(0, document.body.scrollHeight);
         });
-        // thinking face is clicked
-        socket.on("thinking face", function(msg) {
+        // question is clicked
+        socket.on("question", function(msg) {
           $("#messages").append(
-            "<li>&#x1f914;&#x1f914;&#x1f914; " + msg + "</li>"
+            "<li>&#x2753;&#x2753;&#x2753; " + msg + "</li>"
           );
           window.scrollTo(0, document.body.scrollHeight);
         });
