@@ -15,12 +15,12 @@ io.on("connection", function(socket) {
     io.emit("chat message", msg);
   });
 
-  socket.on("thumbs up", function(message_id) {
-    io.emit("thumbs up", message_id);
+  socket.on("thumbs up", function(msg) {
+    io.emit("thumbs up", msg);
   });
 
-  socket.on("thinking face", function(message_id) {
-    io.emit("thinking face", message_id);
+  socket.on("thinking face", function(msg) {
+    io.emit("thinking face", msg);
   });
 });
 

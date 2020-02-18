@@ -8,7 +8,7 @@
         padding: 0;
         box-sizing: border-box;
       }
-      body {
+      body button {
         font-size: 16px;
       }
       form {
@@ -92,24 +92,12 @@
 
         // like button is clicked
         $(document).on("click", ".thumbs_up_button", function() {
-          if ($(this).hasClass("thumbs_up_disabled")) {
-            $(this)
-              .removeClass("thumbs_up_disabled")
-              .addClass("thumbs_up_enabled");
-          } else {
-            $(this).append("&#x1f44d;");
-          }
+          socket.emit("thumbs up", $(this).data("msg"));
         });
 
         // thinking face button is clicked
         $(document).on("click", ".thinking_face_button", function() {
-          if ($(this).hasClass("thinking_face_disabled")) {
-            $(this)
-              .removeClass("thinking_face_disabled")
-              .addClass("thinking_face_enabled");
-          } else {
-            $(this).append("&#x1f914;");
-          }
+          socket.emit("thinking face", $(this).data("msg"));
         });
 
         // chat messge is submitted
@@ -132,12 +120,27 @@
               "</span>) <span class='message'>" +
               msg +
               "</span> " +
-              "<span class='thumbs'><button class='thumbs_up_disabled thumbs_up_button' id='" +
-              now_id +
+              "<span class='thumbs'><button class='thumbs_up_disabled thumbs_up_button' data-msg='" +
+              msg +
               "'>&#x1f44d;</button></span>" +
-              "<span class='thinking'><button class='thinking_face_disabled thinking_face_button' id='" +
-              now_id +
+              "<span class='thinking'><button class='thinking_face_disabled thinking_face_button' data-msg='" +
+              msg +
               "'>&#x1f914;</button></span></li>"
+          );
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        // thumbs up is clicked
+        socket.on("thumbs up", function(msg) {
+          $("#messages").append(
+            "<li>&#x1f44d;&#x1f44d;&#x1f44d; " + msg + "</li>"
+          );
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+        // thinking face is clicked
+        socket.on("thinking face", function(msg) {
+          $("#messages").append(
+            "<li>&#x1f914;&#x1f914;&#x1f914; " + msg + "</li>"
           );
           window.scrollTo(0, document.body.scrollHeight);
         });
