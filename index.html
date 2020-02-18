@@ -54,6 +54,21 @@
         filter: grayscale(0%);
         border-style: none;
       }
+      .thinking_face_disabled {
+        background-color: Transparent;
+        filter: grayscale(100%);
+        border-style: none;
+      }
+      .thinking_face_disabled:hover {
+        background-color: Transparent;
+        filter: grayscale(0%);
+        border-style: none;
+      }
+      .thinking_face_enabled {
+        background-color: Transparent;
+        filter: grayscale(0%);
+        border-style: none;
+      }
     </style>
   </head>
   <body>
@@ -76,13 +91,24 @@
         var socket = io();
 
         // like button is clicked
-        $(document).on("click", "#thumbs_up", function() {
+        $(document).on("click", ".thumbs_up_button", function() {
           if ($(this).hasClass("thumbs_up_disabled")) {
             $(this)
               .removeClass("thumbs_up_disabled")
               .addClass("thumbs_up_enabled");
           } else {
             $(this).append("&#x1f44d;");
+          }
+        });
+
+        // thinking face button is clicked
+        $(document).on("click", ".thinking_face_button", function() {
+          if ($(this).hasClass("thinking_face_disabled")) {
+            $(this)
+              .removeClass("thinking_face_disabled")
+              .addClass("thinking_face_enabled");
+          } else {
+            $(this).append("&#x1f914;");
           }
         });
 
@@ -99,15 +125,19 @@
           var now_utc = Date.now();
           var now_id = now_utc.toString();
           $("#messages").append(
-            "<li id='" +
-              now_id +
-              "'>(<span class='date'>" +
+            "<li>(<span class='date'>" +
               now.toLocaleDateString() +
               " " +
               now.toLocaleTimeString() +
               "</span>) <span class='message'>" +
               msg +
-              "</span> <span class='thumbs'><button class='thumbs_up_disabled' id='thumbs_up'>&#x1f44d;</button></span></li>"
+              "</span> " +
+              "<span class='thumbs'><button class='thumbs_up_disabled thumbs_up_button' id='" +
+              now_id +
+              "'>&#x1f44d;</button></span>" +
+              "<span class='thinking'><button class='thinking_face_disabled thinking_face_button' id='" +
+              now_id +
+              "'>&#x1f914;</button></span></li>"
           );
           window.scrollTo(0, document.body.scrollHeight);
         });

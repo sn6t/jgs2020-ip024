@@ -14,6 +14,14 @@ io.on("connection", function(socket) {
   socket.on("chat message", function(msg) {
     io.emit("chat message", msg);
   });
+
+  socket.on("thumbs up", function(message_id) {
+    io.emit("thumbs up", message_id);
+  });
+
+  socket.on("thinking face", function(message_id) {
+    io.emit("thinking face", message_id);
+  });
 });
 
 http.listen(port, function() {
