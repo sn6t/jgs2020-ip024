@@ -105,8 +105,6 @@
         // chat message is received
         socket.on("chat message", function(msg) {
           var now = new Date();
-          var now_utc = Date.now();
-          var now_id = now_utc.toString();
           $("#messages").append(
             "<li>(<span class='date'>" +
               now.toLocaleDateString() +
