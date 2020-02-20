@@ -72,7 +72,8 @@
   </head>
   <body>
     <button id="button" onclick="toggleStartStop()">
-      &#x23fa; Click to Speak (Google Chrome Only)
+      &#x23fa; Click to Speak (Google Chrome Only excl. Google Chrome on
+      Android)
     </button>
     <ul id="messages"></ul>
     <form action="">
@@ -173,7 +174,8 @@
 
       function reset() {
         recognizing = false;
-        button.innerHTML = "&#x23fa; Click to Speak (Google Chrome Only)";
+        button.innerHTML =
+          "&#x23fa; Click to Speak (Google Chrome Only excl. Google Chrome on Android)";
         button.setAttribute("style", "color:black;background-color:white;");
       }
 
@@ -184,7 +186,8 @@
         } else {
           recognition.start();
           recognizing = true;
-          button.innerHTML = "&#x23f9; Click to Stop (Google Chrome Only)";
+          button.innerHTML =
+            "&#x23f9; Click to Stop (Google Chrome Only excl. Google Chrome on Android)";
           button.setAttribute("style", "color:white;background-color:red;");
         }
       }
