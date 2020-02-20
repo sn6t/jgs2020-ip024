@@ -71,7 +71,9 @@
     </style>
   </head>
   <body>
-    <button id="button" onclick="toggleStartStop()"></button>
+    <button id="button" onclick="toggleStartStop()">
+      &#x23fa; Click to Speak (Google Chrome Only)
+    </button>
     <ul id="messages"></ul>
     <form action="">
       <input
@@ -87,12 +89,15 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      var recognizing;
-      var recognition = new webkitSpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      reset();
-      recognition.onend = reset;
+      var userAgent = window.navigator.userAgent.toLowerCase();
+      if (userAgent.indexOf("chrome") != -1) {
+        var recognizing;
+        var recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        reset();
+        recognition.onend = reset;
+      }
 
       $(function() {
         var socket = io();
@@ -160,7 +165,7 @@
             }
           }
           if (final != "") {
-            socket.emit("chat message", final);
+            socket.emit("chat message", final.replace(/\s+/g, ""));
             final = "";
           }
         };
