@@ -91,6 +91,7 @@
     <script>
       var userAgent = window.navigator.userAgent.toLowerCase();
       if (userAgent.indexOf("chrome") != -1) {
+        var button_hover = false;
         var messages_hover = false;
         var recognizing;
         var recognition = new webkitSpeechRecognition();
@@ -112,6 +113,16 @@
         $(document).on("click", ".question_button", function() {
           socket.emit("question", $(this).data("msg"));
         });
+
+        // caputre hovering state of #button
+        $("#button").hover(
+          function() {
+            button_hover = true;
+          },
+          function() {
+            button_hover = false;
+          }
+        );
 
         // caputre hovering state of #messages
         $("#messages").hover(
@@ -148,7 +159,7 @@
               msg +
               "' title='Question Button'>&#x2753;</button></span></li>"
           );
-          if (messages_hover == false) {
+          if (button_hover == false && messages_hover == false) {
             window.scrollTo(0, document.body.scrollHeight);
           }
         });
@@ -158,7 +169,7 @@
           $("#messages").append(
             "<li>&#x1f44d;&#x1f44d;&#x1f44d; " + msg + "</li>"
           );
-          if (messages_hover == false) {
+          if (button_hover == false && messages_hover == false) {
             window.scrollTo(0, document.body.scrollHeight);
           }
         });
@@ -167,7 +178,7 @@
           $("#messages").append(
             "<li>&#x2753;&#x2753;&#x2753; " + msg + "</li>"
           );
-          if (messages_hover == false) {
+          if (button_hover == false && messages_hover == false) {
             window.scrollTo(0, document.body.scrollHeight);
           }
         });
