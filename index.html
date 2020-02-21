@@ -164,8 +164,10 @@
               final = event.results[last_result][0].transcript;
             }
           }
+          final = final.trim();
           if (final != "") {
-            socket.emit("chat message", final.replace(/\s+/g, ""));
+            final = final.charAt(0).toUpperCase() + final.slice(1);
+            socket.emit("chat message", final);
             final = "";
           }
         };
