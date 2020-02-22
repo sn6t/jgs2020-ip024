@@ -8,12 +8,28 @@
         padding: 0;
         box-sizing: border-box;
       }
-      body button {
+      button {
         font-size: 16px;
       }
       #button {
-        font-size: 16px;
         padding: 5px 10px;
+      }
+      .rec {
+        animation-name: pulse;
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+      @keyframes pulse {
+        0% {
+          box-shadow: 0px 0px 3px 0px rgba(173, 0, 0, 0.3);
+        }
+        65% {
+          box-shadow: 0px 0px 3px 4px rgba(173, 0, 0, 0.3);
+        }
+        90% {
+          box-shadow: 0px 0px 3px 4px rgba(173, 0, 0, 0);
+        }
       }
       form {
         background: #000;
@@ -43,27 +59,27 @@
       #messages {
         margin-bottom: 40px;
       }
-      .thumbs_up_disabled {
+      .thumbs_up_style {
         background-color: Transparent;
         filter: grayscale(100%);
         border-style: none;
       }
-      .thumbs_up_disabled:hover {
+      .thumbs_up_style:hover {
         background-color: Transparent;
         filter: grayscale(0%);
         border-style: none;
       }
-      .thumbs_up_enabled {
+      .thumbs_up_style {
         background-color: Transparent;
         filter: grayscale(0%);
         border-style: none;
       }
-      .question_disabled {
+      .question_style {
         background-color: Transparent;
         filter: grayscale(100%);
         border-style: none;
       }
-      .question_disabled:hover {
+      .question_style:hover {
         background-color: Transparent;
         filter: grayscale(0%);
         border-style: none;
@@ -89,10 +105,10 @@
       crossorigin="anonymous"
     ></script>
     <script>
+      var button_hover = false;
+      var messages_hover = false;
       var userAgent = window.navigator.userAgent.toLowerCase();
       if (userAgent.indexOf("chrome") != -1) {
-        var button_hover = false;
-        var messages_hover = false;
         var recognizing;
         var recognition = new webkitSpeechRecognition();
         recognition.continuous = true;
@@ -152,10 +168,10 @@
               "</span>) <span class='message'>" +
               msg +
               "</span> " +
-              "<span class='thumbs'><button class='thumbs_up_disabled thumbs_up_button' data-msg='" +
+              "<span class='thumbs'><button class='thumbs_up_style thumbs_up_button' data-msg='" +
               msg +
               "' title='Thumbs Up Button'>&#x1f44d;</button></span>" +
-              "<span class='question'><button class='question_disabled question_button' data-msg='" +
+              "<span class='question'><button class='question_style question_button' data-msg='" +
               msg +
               "' title='Question Button'>&#x2753;</button></span></li>"
           );
@@ -183,22 +199,24 @@
           }
         });
 
-        recognition.onresult = function(event) {
-          var final = "";
-          var interim = "";
-          var last_result = event.results.length - 1;
-          for (var i = 0; i < event.results.length; ++i) {
-            if (event.results[last_result].isFinal) {
-              final = event.results[last_result][0].transcript;
+        if (userAgent.indexOf("chrome") != -1) {
+          recognition.onresult = function(event) {
+            var final = "";
+            var interim = "";
+            var last_result = event.results.length - 1;
+            for (var i = 0; i < event.results.length; ++i) {
+              if (event.results[last_result].isFinal) {
+                final = event.results[last_result][0].transcript;
+              }
             }
-          }
-          final = final.trim();
-          if (final != "") {
-            final = final.charAt(0).toUpperCase() + final.slice(1);
-            socket.emit("chat message", final);
-            final = "";
-          }
-        };
+            final = final.trim();
+            if (final != "") {
+              final = final.charAt(0).toUpperCase() + final.slice(1);
+              socket.emit("chat message", final);
+              final = "";
+            }
+          };
+        }
       });
 
       function reset() {
@@ -206,6 +224,7 @@
         button.innerHTML =
           "&#x23fa; Click to Speak (Only works in Google Chrome for Desktop)";
         button.setAttribute("style", "color:black;background-color:white;");
+        button.removeAttribute("class", "rec");
       }
 
       function toggleStartStop() {
@@ -218,6 +237,7 @@
           button.innerHTML =
             "&#x23f9; Click to Stop (Only works in Google Chrome for Desktop)";
           button.setAttribute("style", "color:white;background-color:red;");
+          button.setAttribute("class", "rec");
         }
       }
     </script>
