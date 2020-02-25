@@ -11,8 +11,14 @@
       button {
         font-size: 16px;
       }
-      #button {
+      #button,
+      #copy {
         padding: 5px 10px;
+      }
+      #button:hover,
+      #copy:hover {
+        padding: 5px 10px;
+        background-color: pink;
       }
       .rec {
         animation-name: pulse;
@@ -89,6 +95,9 @@
   <body>
     <button id="button" onclick="toggleStartStop()">
       &#x23fa; Click to Speak (Only works in Google Chrome for Desktop)
+    </button>
+    <button id="copy" onclick="clipboardCopy()">
+      &#x1f5d2; Click to Copy to Clipboard
     </button>
     <ul id="messages"></ul>
     <form action="">
@@ -240,6 +249,9 @@
           button.setAttribute("class", "rec");
         }
       }
+
+      // copy all messages to clipboard
+      function clipboardCopy() {}
     </script>
   </body>
 </html>
