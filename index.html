@@ -15,15 +15,16 @@
       #copy {
         padding: 5px 10px;
       }
-      #button:hover,
-      #copy:hover {
-        padding: 5px 10px;
-        background-color: pink;
-      }
       .rec {
         animation-name: pulse;
         animation-duration: 1.5s;
         animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+      .copy {
+        animation-name: pulse;
+        animation-duration: 1.5s;
+        animation-iteration-count: 1;
         animation-timing-function: linear;
       }
       @keyframes pulse {
@@ -97,7 +98,7 @@
       &#x23fa; Click to Speak (Only works in Google Chrome for Desktop)
     </button>
     <button id="copy" onclick="clipboardCopy()">
-      &#x1f5d2; Click to Copy to Clipboard
+      &#x1f5d2; Click to Copy Voice Text to Clipboard
     </button>
     <ul id="messages"></ul>
     <form action="">
@@ -251,7 +252,27 @@
       }
 
       // copy all messages to clipboard
-      function clipboardCopy() {}
+      function clipboardCopy() {
+        // copy all target data to copytext variable
+        var copytext = "";
+        var datelist = document.querySelectorAll(".date");
+        var messagelist = document.querySelectorAll(".message");
+        datelist.forEach(function(item, index) {
+          copytext +=
+            '"' +
+            item.textContent +
+            '","' +
+            messagelist[index].textContent +
+            '"\n';
+        });
+        // copy the value of copytext to clipboard
+        var ta = document.createElement("textarea");
+        ta.value = copytext;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.parentElement.removeChild(ta);
+      }
     </script>
   </body>
 </html>
