@@ -103,5 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-# Application manifest for IBM Cloud deployment
+# Application manifest for IBM Cloud Cloud Foundry runtime deployment
 manifest.yml
