@@ -1,0 +1,15 @@
+---
+applications:
+  - name: input-your-app-name
+    instances: 1
+    memory: 256M
+    disk_quota: 512M
+    path: ./
+    buildpacks:
+      - nodejs_buildpack
+    routes:
+      - route: input-your-app-name.mybluemix.net
+    command: node index.js
+    timeout: 80
+    env:
+      env_type: production
