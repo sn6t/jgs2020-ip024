@@ -4,6 +4,7 @@
   "description": "Japan GUIDE/SHARE 2020 IP-024",
   "dependencies": {
     "basic-auth-connect": "1.0.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "socket.io": "^2.3.0",
     "xss": "^1.0.6"

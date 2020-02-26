@@ -4,8 +4,9 @@ var http = require("http").Server(app);
 var io = require("socket.io")(http);
 var port = process.env.PORT || 3000;
 var xss = require("xss");
+require("dotenv").config();
 
-app.use(basicAuth("jgs", "jgs"));
+app.use(basicAuth(process.env.USERNAME, process.env.PASSWORD));
 
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/index.html");
