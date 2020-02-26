@@ -140,6 +140,13 @@
           socket.emit("question", $(this).data("msg"));
         });
 
+        // copy to clipboard button is clicked
+        $(document).on("click", "#copy", function() {
+          var timeoutID;
+          setCopyButtonStyle();
+          timeoutID = window.setTimeout(clearCopyButtonStyle, 500);
+        });
+
         // caputre hovering state of #button
         $("#button").hover(
           function() {
@@ -253,11 +260,12 @@
 
       // copy all messages to clipboard
       function clipboardCopy() {
-        // copy all target data to copytext variable
+        // copy all messages with date data to a copytext variable
         var copytext = "";
         var datelist = document.querySelectorAll(".date");
         var messagelist = document.querySelectorAll(".message");
         datelist.forEach(function(item, index) {
+          // CSV formatting
           copytext +=
             '"' +
             item.textContent +
@@ -265,13 +273,24 @@
             messagelist[index].textContent +
             '"\n';
         });
-        // copy the value of copytext to clipboard
+        // copy the value of the copytext variable to clipboard
         var ta = document.createElement("textarea");
         ta.value = copytext;
         document.body.appendChild(ta);
         ta.select();
         document.execCommand("copy");
         ta.parentElement.removeChild(ta);
+      }
+
+      // copy button is click
+      var copybutton = document.querySelector("#copy");
+      function setCopyButtonStyle() {
+        copybutton.disabled = true;
+        copybutton.setAttribute("style", "color:white;background-color:red;");
+      }
+      function clearCopyButtonStyle() {
+        copybutton.disabled = false;
+        copybutton.setAttribute("style", "color:black;background-color:white;");
       }
     </script>
   </body>
