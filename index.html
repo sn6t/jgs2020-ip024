@@ -12,7 +12,8 @@
         font-size: 16px;
       }
       #button,
-      #copy {
+      #copy,
+      #copy_reaction {
         padding: 5px 10px;
       }
       .rec {
@@ -21,7 +22,8 @@
         animation-iteration-count: infinite;
         animation-timing-function: linear;
       }
-      .copy {
+      .copy,
+      .copy_reaction {
         animation-name: pulse;
         animation-duration: 1.5s;
         animation-iteration-count: 1;
@@ -92,8 +94,19 @@
     <button id="button" onclick="toggleStartStop()">
       &#x23fa; Click to Speak (Only works in Google Chrome for Desktop)
     </button>
-    <button id="copy" onclick="clipboardCopy()">
+    <button
+      id="copy"
+      onclick="clipboardCopy()"
+      style="color: black; background-color: white;"
+    >
       &#x1f5d2; Click to Copy Voice Text to Clipboard
+    </button>
+    <button
+      id="copy_reaction"
+      onclick="clipboardCopyReactions()"
+      style="color: black; background-color: white;"
+    >
+      &#x1f4cb; Click to Copy Reactions to Clipboard
     </button>
     <ul id="messages"></ul>
     <form action="">
@@ -135,11 +148,18 @@
           socket.emit("question", $(this).data("msg"));
         });
 
-        // copy to clipboard button is clicked
+        // copy messages to clipboard button is clicked
         $(document).on("click", "#copy", function () {
           var timeoutID;
           setCopyButtonStyle();
           timeoutID = window.setTimeout(clearCopyButtonStyle, 500);
+        });
+
+        // copy reactions to clipboard button is clicked
+        $(document).on("click", "#copy_reaction", function () {
+          var timeoutID;
+          setCopyReactionButtonStyle();
+          timeoutID = window.setTimeout(clearCopyReactionButtonStyle, 500);
         });
 
         // caputre hovering state of #button
@@ -195,7 +215,9 @@
         // thumbs up is clicked
         socket.on("thumbs up", function (msg) {
           $("#messages").append(
-            "<li>&#x1f44d;&#x1f44d;&#x1f44d; " + msg + "</li>"
+            "<li><span class='reaction'>&#x1f44d;&#x1f44d;&#x1f44d; " +
+              msg +
+              "</span></li>"
           );
           if (button_hover == false && messages_hover == false) {
             window.scrollTo(0, document.body.scrollHeight);
@@ -204,7 +226,9 @@
         // question is clicked
         socket.on("question", function (msg) {
           $("#messages").append(
-            "<li>&#x2753;&#x2753;&#x2753; " + msg + "</li>"
+            "<li><span class='reaction'>&#x2753;&#x2753;&#x2753; " +
+              msg +
+              "</span></li>"
           );
           if (button_hover == false && messages_hover == false) {
             window.scrollTo(0, document.body.scrollHeight);
@@ -284,6 +308,23 @@
         ta.parentElement.removeChild(ta);
       }
 
+      // copy all reactions to clipboard
+      function clipboardCopyReactions() {
+        // copy all reactions to a copytext variable
+        var copytext = "";
+        var messagelist = document.querySelectorAll(".reaction");
+        messagelist.forEach(function (item, index) {
+          copytext += '"' + item.textContent + '"\n';
+        });
+        // copy the value of the copytext variable to clipboard
+        var ta = document.createElement("textarea");
+        ta.value = copytext;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.parentElement.removeChild(ta);
+      }
+
       // copy button is click
       var copybutton = document.querySelector("#copy");
       function setCopyButtonStyle() {
@@ -293,6 +334,23 @@
       function clearCopyButtonStyle() {
         copybutton.disabled = false;
         copybutton.setAttribute("style", "color:black;background-color:white;");
+      }
+
+      // copy reaction button is click
+      var copyreactionbutton = document.querySelector("#copy_reaction");
+      function setCopyReactionButtonStyle() {
+        copyreactionbutton.disabled = true;
+        copyreactionbutton.setAttribute(
+          "style",
+          "color:white;background-color:red;"
+        );
+      }
+      function clearCopyReactionButtonStyle() {
+        copyreactionbutton.disabled = false;
+        copyreactionbutton.setAttribute(
+          "style",
+          "color:black;background-color:white;"
+        );
       }
     </script>
   </body>
