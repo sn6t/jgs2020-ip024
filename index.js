@@ -14,7 +14,11 @@ app.get("/", function (req, res) {
 
 io.on("connection", function (socket) {
   socket.on("chat message", function (data) {
-    io.emit("chat message", { msg: xss(data.msg), nowid: data.nowid });
+    io.emit("chat message", {
+      from: data.from,
+      msg: xss(data.msg),
+      nowid: data.nowid,
+    });
   });
 
   socket.on("thumbs up", function (id) {

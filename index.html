@@ -105,13 +105,6 @@
     >
       &#x1f5d2; Click to Copy Voice Text to Clipboard
     </button>
-    <button
-      id="copy_reaction"
-      onclick="clipboardCopyReactions()"
-      style="color: black; background-color: white;"
-    >
-      &#x1f4cb; Click to Copy Reactions to Clipboard
-    </button>
     <ul id="messages"></ul>
     <form action="">
       <input
@@ -190,7 +183,8 @@
         $("form").submit(function () {
           var now_id = Date.now();
           socket.emit("chat message", {
-            msg: "&#x1f4dd; " + $("#m").val(),
+            from: "text",
+            msg: $("#m").val(),
             nowid: now_id,
           });
           $("#m").val("");
@@ -200,22 +194,30 @@
         // chat message is received
         socket.on("chat message", function (data) {
           var now = new Date();
+          var from = "";
+          if (data.from == "voice") {
+            from = "&#x1f399;";
+          } else {
+            from = "&#x1f4dd;";
+          }
           $("#messages").append(
             "<li>(<span class='date'>" +
               now.toLocaleDateString() +
               " " +
               now.toLocaleTimeString() +
-              "</span>) <span class='message'>" +
+              "</span>) <span class='from'>" +
+              from +
+              "</span> <span class='message'>" +
               data.msg +
               "</span> " +
               "<span class='thumbs'><button class='thumbs_up_style thumbs_up_button' data-id='" +
               data.nowid +
-              "' title='Thumbs Up Button'>&#x1f44d;</button><span class='tu_number_zero' id='thumbsup_" +
+              "' title='Thumbs Up Button'>&#x1f44d;</button><span class='tu_number_zero thumbsup_count' id='thumbsup_" +
               data.nowid +
               "'>0</span></span>" +
               "<span class='question'><button class='question_style question_button' data-id='" +
               data.nowid +
-              "' title='Question Button'>&#x2753;</button><span class='qu_number_zero' id='question_" +
+              "' title='Question Button'>&#x2753;</button><span class='qu_number_zero question_count' id='question_" +
               data.nowid +
               "'>0</span></span></li>"
           );
@@ -271,7 +273,8 @@
               final = final.charAt(0).toUpperCase() + final.slice(1);
               var now_id = Date.now();
               socket.emit("chat message", {
-                msg: "&#x1f399; " + final,
+                from: "voice",
+                msg: final,
                 nowid: now_id,
               });
               final = "";
@@ -314,38 +317,23 @@
         // copy all messages with date data to a copytext variable
         var copytext = "";
         var datelist = document.querySelectorAll(".date");
+        var fromlist = document.querySelectorAll(".from");
         var messagelist = document.querySelectorAll(".message");
+        var thumbsuplist = document.querySelectorAll(".thumbsup_count");
+        var questionlist = document.querySelectorAll(".question_count");
         datelist.forEach(function (item, index) {
           // CSV formatting
           copytext +=
             '"' +
             item.textContent +
             '","' +
-            messagelist[index].textContent +
-            '"\n';
-        });
-        // copy the value of the copytext variable to clipboard
-        var ta = document.createElement("textarea");
-        ta.value = copytext;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        ta.parentElement.removeChild(ta);
-      }
-
-      // copy all reactions to clipboard
-      function clipboardCopyReactions() {
-        // copy all reactions with date data to a copytext variable
-        var copytext = "";
-        var datelist = document.querySelectorAll(".reaction_date");
-        var messagelist = document.querySelectorAll(".reaction");
-        datelist.forEach(function (item, index) {
-          // CSV formatting
-          copytext +=
-            '"' +
-            item.textContent +
+            fromlist[index].textContent +
             '","' +
             messagelist[index].textContent +
+            '","' +
+            thumbsuplist[index].textContent +
+            '","' +
+            questionlist[index].textContent +
             '"\n';
         });
         // copy the value of the copytext variable to clipboard
@@ -366,23 +354,6 @@
       function clearCopyButtonStyle() {
         copybutton.disabled = false;
         copybutton.setAttribute("style", "color:black;background-color:white;");
-      }
-
-      // copy reaction button is click
-      var copyreactionbutton = document.querySelector("#copy_reaction");
-      function setCopyReactionButtonStyle() {
-        copyreactionbutton.disabled = true;
-        copyreactionbutton.setAttribute(
-          "style",
-          "color:white;background-color:red;"
-        );
-      }
-      function clearCopyReactionButtonStyle() {
-        copyreactionbutton.disabled = false;
-        copyreactionbutton.setAttribute(
-          "style",
-          "color:black;background-color:white;"
-        );
       }
     </script>
   </body>
