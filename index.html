@@ -181,13 +181,15 @@
 
         // chat messge is submitted
         $("form").submit(function () {
-          var now_id = Date.now();
-          socket.emit("chat message", {
-            from: "text",
-            msg: $("#m").val(),
-            nowid: now_id,
-          });
-          $("#m").val("");
+          if ($("#m").val() != "") {
+            var now_id = Date.now();
+            socket.emit("chat message", {
+              from: "text",
+              msg: $("#m").val(),
+              nowid: now_id,
+            });
+            $("#m").val("");
+          }
           return false;
         });
 
