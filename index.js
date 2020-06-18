@@ -13,16 +13,20 @@ app.get("/", function (req, res) {
 });
 
 io.on("connection", function (socket) {
-  socket.on("chat message", function (msg) {
-    io.emit("chat message", xss(msg));
+  socket.on("chat message", function (data) {
+    io.emit("chat message", {
+      from: data.from,
+      msg: xss(data.msg),
+      nowid: data.nowid,
+    });
   });
 
-  socket.on("thumbs up", function (msg) {
-    io.emit("thumbs up", xss(msg));
+  socket.on("thumbs up", function (id) {
+    io.emit("thumbs up", xss(id));
   });
 
-  socket.on("question", function (msg) {
-    io.emit("question", xss(msg));
+  socket.on("question", function (id) {
+    io.emit("question", xss(id));
   });
 });
 

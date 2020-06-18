@@ -88,6 +88,10 @@
         filter: grayscale(0%);
         border-style: none;
       }
+      .qu_number_zero,
+      .tu_number_zero {
+        color: gray;
+      }
     </style>
   </head>
   <body>
@@ -100,13 +104,6 @@
       style="color: black; background-color: white;"
     >
       &#x1f5d2; Click to Copy Voice Text to Clipboard
-    </button>
-    <button
-      id="copy_reaction"
-      onclick="clipboardCopyReactions()"
-      style="color: black; background-color: white;"
-    >
-      &#x1f4cb; Click to Copy Reactions to Clipboard
     </button>
     <ul id="messages"></ul>
     <form action="">
@@ -140,12 +137,12 @@
 
         // like button is clicked
         $(document).on("click", ".thumbs_up_button", function () {
-          socket.emit("thumbs up", $(this).data("msg"));
+          socket.emit("thumbs up", $(this).data("id"));
         });
 
         // question button is clicked
         $(document).on("click", ".question_button", function () {
-          socket.emit("question", $(this).data("msg"));
+          socket.emit("question", $(this).data("id"));
         });
 
         // copy messages to clipboard button is clicked
@@ -184,28 +181,47 @@
 
         // chat messge is submitted
         $("form").submit(function () {
-          socket.emit("chat message", "&#x1f4dd; " + $("#m").val());
-          $("#m").val("");
+          if ($("#m").val() != "") {
+            var now_id = Date.now();
+            socket.emit("chat message", {
+              from: "text",
+              msg: $("#m").val(),
+              nowid: now_id,
+            });
+            $("#m").val("");
+          }
           return false;
         });
 
         // chat message is received
-        socket.on("chat message", function (msg) {
+        socket.on("chat message", function (data) {
           var now = new Date();
+          var from = "";
+          if (data.from == "voice") {
+            from = "&#x1f399;";
+          } else {
+            from = "&#x1f4dd;";
+          }
           $("#messages").append(
             "<li>(<span class='date'>" +
               now.toLocaleDateString() +
               " " +
               now.toLocaleTimeString() +
-              "</span>) <span class='message'>" +
-              msg +
+              "</span>) <span class='from'>" +
+              from +
+              "</span> <span class='message'>" +
+              data.msg +
               "</span> " +
-              "<span class='thumbs'><button class='thumbs_up_style thumbs_up_button' data-msg='" +
-              msg +
-              "' title='Thumbs Up Button'>&#x1f44d;</button></span>" +
-              "<span class='question'><button class='question_style question_button' data-msg='" +
-              msg +
-              "' title='Question Button'>&#x2753;</button></span></li>"
+              "<span class='thumbs'><button class='thumbs_up_style thumbs_up_button' data-id='" +
+              data.nowid +
+              "' title='Thumbs Up Button'>&#x1f44d;</button><span class='tu_number_zero thumbsup_count' id='thumbsup_" +
+              data.nowid +
+              "'>0</span></span>" +
+              "<span class='question'><button class='question_style question_button' data-id='" +
+              data.nowid +
+              "' title='Question Button'>&#x2753;</button><span class='qu_number_zero question_count' id='question_" +
+              data.nowid +
+              "'>0</span></span></li>"
           );
           if (button_hover == false && messages_hover == false) {
             window.scrollTo(0, document.body.scrollHeight);
@@ -213,33 +229,32 @@
         });
 
         // thumbs up is clicked
-        socket.on("thumbs up", function (msg) {
-          var now = new Date();
-          $("#messages").append(
-            "<li>(<span class='reaction_date'>" +
-              now.toLocaleDateString() +
-              " " +
-              now.toLocaleTimeString() +
-              "</span>) <span class='reaction'>&#x1f44d;&#x1f44d;&#x1f44d; " +
-              msg +
-              "</span></li>"
-          );
+        socket.on("thumbs up", function (id) {
+          const thumbsid = "thumbsup_" + id;
+          console.log(document);
+          var counter = parseInt(document.getElementById(thumbsid).textContent);
+          counter = counter + 1;
+          document.getElementById(thumbsid).textContent = counter.toString();
+          document
+            .getElementById(thumbsid)
+            .setAttribute("style", "color:red;font-weight:bold;");
+
           if (button_hover == false && messages_hover == false) {
             window.scrollTo(0, document.body.scrollHeight);
           }
         });
         // question is clicked
-        socket.on("question", function (msg) {
-          var now = new Date();
-          $("#messages").append(
-            "<li>(<span class='reaction_date'>" +
-              now.toLocaleDateString() +
-              " " +
-              now.toLocaleTimeString() +
-              "</span>) <span class='reaction'>&#x2753;&#x2753;&#x2753; " +
-              msg +
-              "</span></li>"
+        socket.on("question", function (id) {
+          const questionid = "question_" + id;
+          console.log(document);
+          var counter = parseInt(
+            document.getElementById(questionid).textContent
           );
+          counter = counter + 1;
+          document.getElementById(questionid).textContent = counter.toString();
+          document
+            .getElementById(questionid)
+            .setAttribute("style", "color:red;font-weight:bold;");
           if (button_hover == false && messages_hover == false) {
             window.scrollTo(0, document.body.scrollHeight);
           }
@@ -258,7 +273,12 @@
             final = final.trim();
             if (final != "") {
               final = final.charAt(0).toUpperCase() + final.slice(1);
-              socket.emit("chat message", "&#x1f399; " + final);
+              var now_id = Date.now();
+              socket.emit("chat message", {
+                from: "voice",
+                msg: final,
+                nowid: now_id,
+              });
               final = "";
             }
           };
@@ -299,38 +319,23 @@
         // copy all messages with date data to a copytext variable
         var copytext = "";
         var datelist = document.querySelectorAll(".date");
+        var fromlist = document.querySelectorAll(".from");
         var messagelist = document.querySelectorAll(".message");
+        var thumbsuplist = document.querySelectorAll(".thumbsup_count");
+        var questionlist = document.querySelectorAll(".question_count");
         datelist.forEach(function (item, index) {
           // CSV formatting
           copytext +=
             '"' +
             item.textContent +
             '","' +
-            messagelist[index].textContent +
-            '"\n';
-        });
-        // copy the value of the copytext variable to clipboard
-        var ta = document.createElement("textarea");
-        ta.value = copytext;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        ta.parentElement.removeChild(ta);
-      }
-
-      // copy all reactions to clipboard
-      function clipboardCopyReactions() {
-        // copy all reactions with date data to a copytext variable
-        var copytext = "";
-        var datelist = document.querySelectorAll(".reaction_date");
-        var messagelist = document.querySelectorAll(".reaction");
-        datelist.forEach(function (item, index) {
-          // CSV formatting
-          copytext +=
-            '"' +
-            item.textContent +
+            fromlist[index].textContent +
             '","' +
             messagelist[index].textContent +
+            '","' +
+            thumbsuplist[index].textContent +
+            '","' +
+            questionlist[index].textContent +
             '"\n';
         });
         // copy the value of the copytext variable to clipboard
@@ -351,23 +356,6 @@
       function clearCopyButtonStyle() {
         copybutton.disabled = false;
         copybutton.setAttribute("style", "color:black;background-color:white;");
-      }
-
-      // copy reaction button is click
-      var copyreactionbutton = document.querySelector("#copy_reaction");
-      function setCopyReactionButtonStyle() {
-        copyreactionbutton.disabled = true;
-        copyreactionbutton.setAttribute(
-          "style",
-          "color:white;background-color:red;"
-        );
-      }
-      function clearCopyReactionButtonStyle() {
-        copyreactionbutton.disabled = false;
-        copyreactionbutton.setAttribute(
-          "style",
-          "color:black;background-color:white;"
-        );
       }
     </script>
   </body>
