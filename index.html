@@ -65,6 +65,15 @@
       #messages li:nth-child(odd) {
         background: #eee;
       }
+
+      #messages .li_text {
+        background: #bee9f7;
+      }
+
+      #messages .li_text:nth-child(odd) {
+        background: #add8e6;
+      }
+
       #messages {
         margin-bottom: 40px;
       }
@@ -197,13 +206,17 @@
         socket.on("chat message", function (data) {
           var now = new Date();
           var from = "";
+          var li_style = "";
           if (data.from == "voice") {
             from = "&#x1f399;";
+            li_style = "<li>";
           } else {
             from = "&#x1f4dd;";
+            li_style = "<li class='li_text'>";
           }
           $("#messages").append(
-            "<li>(<span class='date'>" +
+            li_style +
+              "(<span class='date'>" +
               now.toLocaleDateString() +
               " " +
               now.toLocaleTimeString() +
