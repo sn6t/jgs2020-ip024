@@ -9,13 +9,13 @@
 
 ## 説明
 
-- 音声認識技術は、[Web Speech API](https://developer.mozilla.org/ja/docs/Web/API/Web_Speech_API)を使用しています。Web Speech API は、現時点では Google Chrome ブラウザでのみサポートされているため、それ以外のブラウザでは音声認識機能は利用できません。Google Chrome ブラウザはデスクトップ版でのみ動作検証を行っており、モバイル版では動作検証は行っておりません。**音声認識させたい講師は、Google Chrome がインストールされて、マイク等で音声入力が可能な PC を使用してください**。音声認識機能を利用しない場合は、Google Chrome 以外の主要ブラウザでも利用可能です。
-- 講師が発話した内容の音声テキスト、いいねボタンや分からないボタンのクリック情報、チャットボックスに入力したテキストは、[Node.js](https://nodejs.org/ja/)の[Socket.IO](https://socket.io/)エンジンを利用して、リアルタイムに共有（アプリケーションを表示している全員に対してブロードキャスト）されます。**アプリケーションは、講師および受講者が参照可能な Web アプリケーション・サーバーで動作させてください**。私たちのタスクでは、IBM Cloud の[Cloud Foundry Public](https://www.ibm.com/jp-ja/cloud/cloud-foundry)でアプリケーションを動作させました。
+- 音声認識技術は、[Web Speech API](https://developer.mozilla.org/ja/docs/Web/API/Web_Speech_API) を使用しています。Web Speech API は、現時点では Google Chrome ブラウザでのみサポートされているため、それ以外のブラウザでは音声認識機能は利用できません。Google Chrome ブラウザはデスクトップ版でのみ動作検証を行っており、モバイル版では動作検証は行っておりません。**音声認識させたい講師は、Google Chrome がインストールされて、マイク等で音声入力が可能な PC を使用してください**。音声認識機能を利用しない場合は、Google Chrome 以外の主要ブラウザでも利用可能です。
+- 講師が発話した内容の音声テキスト、いいねボタンや分からないボタンのクリック情報、チャットボックスに入力したテキストは、[Node.js](https://nodejs.org/ja/) の [Socket.IO](https://socket.io/) エンジンを利用して、リアルタイムに共有（アプリケーションを表示している全員に対してブロードキャスト）されます。**アプリケーションは、講師および受講者が参照可能な Web アプリケーション・サーバーで動作させてください**。私たちのタスクでは、IBM Cloud の [Cloud Foundry Public](https://www.ibm.com/jp-ja/cloud/cloud-foundry) でアプリケーションを動作させました。
 - 画面に出力された音声テキストやチャットメッセージとその投稿日時、いいねボタンや分からないボタンが実行された回数は、クリップボードに CSV 形式でコピーすることが出来ます（Click to Copy Voice Text to Clipboard ボタン）。ログを残したい場合はご利用くだっさい。画面に出力されている情報を取得しているだけですので、自分が画面を表示する前のログを遡って取得することは出来ません。
 
 ## 使用手順
 
-Node.js が利用可能であること、Git が利用可能であること
+Node.js が利用可能であること、Git が利用可能であることが前提です。その他の基本的な手順の説明は割愛します。
 
 .env.sample を.env にファイル名変更してください。.env には、Basic 認証の ID とパスワードが記載されています。任意で変更してください。
 
