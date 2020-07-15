@@ -1,10 +1,10 @@
-# JGS 2020 IP-024 Meeting Police
+# JGS 2020 IP-024 セミナーアシスト
 
 <img src="https://user-images.githubusercontent.com/23325882/86427041-21194d00-bd24-11ea-8480-11e34c0ca1fe.gif" alt="Meeting Police Screen Image" width="576" height="360">
 
 ## 概要
 
-このコードは、[日本 GUIDE/SHARE 委員会](http://www.uken.or.jp/jgs/news/index.html)の 2020 年タスク活動での検証を目的に作成したアプリケーションです。
+このコードは、[日本 GUIDE/SHARE 委員会](http://www.uken.or.jp/jgs/news/index.html)の 2019-2020 年度タスク活動での検証を目的に作成したアプリケーションです。
 企業の社内研修で、研修講師が話した声をリアルタイムに音声認識させ、受講者が匿名で音声テキストに対して「いいね」や「分からない」と反応したり、チャットボックスにテキストで質問をすることで、講師と受講者の間のコミュニケーションを促進し、受講者の理解度に合わせた研修運営を行うことを支援します。
 
 ## 説明
