@@ -16,6 +16,8 @@ button {
     animation-duration: 1.5s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
+    color: white;
+    background-color: red;
   }
 
 .copy, .copy_reaction {
@@ -105,4 +107,19 @@ form input {
 
 .qu_number_zero, .tu_number_zero {
     color: gray;
+}
+
+.copy_button_default {
+  color: black; 
+  background-color: white;
+}
+
+.copy_button_clicked {
+  color: white;
+  background-color: red;
+}
+
+.thumbs_up_mtone, .question_mtone {
+  color: red;
+  font-weight: bold;
 }
