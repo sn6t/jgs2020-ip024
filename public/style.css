@@ -1,0 +1,108 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+button {
+    font-size: 16px;
+  }
+
+#button, #copy, #copy_reaction {
+    padding: 5px 10px;
+  }
+.rec {
+    animation-name: pulse;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+.copy, .copy_reaction {
+    animation-name: pulse;
+    animation-duration: 1.5s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+  }
+
+@keyframes pulse {
+    0% {
+      box-shadow: 0px 0px 3px 0px rgba(173, 0, 0, 0.3);
+    }
+    65% {
+      box-shadow: 0px 0px 3px 4px rgba(173, 0, 0, 0.3);
+    }
+    90% {
+      box-shadow: 0px 0px 3px 4px rgba(173, 0, 0, 0);
+    }
+  }
+
+form {
+    background: #000;
+    padding: 3px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+
+form input {
+    font-size: 14px;
+    border: 0;
+    padding: 10px;
+    width: 100%;
+    margin-right: 0.5%;
+  }
+
+#messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+#messages li {
+    padding: 5px 10px;
+  }
+
+#messages li:nth-child(odd) {
+    background: #eee;
+}
+
+#messages .li_text {
+  background: #bee9f7;
+}
+
+#messages .li_text:nth-child(odd) {
+  background: #add8e6;
+}
+
+#messages {
+    margin-bottom: 40px;
+  }
+
+.thumbs_up_style {
+    background-color: Transparent;
+    filter: grayscale(100%);
+    border-style: none;
+  }
+
+.thumbs_up_style:hover {
+    background-color: Transparent;
+    filter: grayscale(0%);
+    border-style: none;
+  }
+
+.question_style {
+    background-color: Transparent;
+    filter: grayscale(100%);
+    border-style: none;
+  }
+
+.question_style:hover {
+    background-color: Transparent;
+    filter: grayscale(0%);
+    border-style: none;
+  }
+
+.qu_number_zero, .tu_number_zero {
+    color: gray;
+}

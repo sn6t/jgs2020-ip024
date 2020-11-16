@@ -1,4 +1,5 @@
-var app = require("express")();
+const express = require("express");
+const app = express();
 var basicAuth = require("basic-auth-connect");
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
@@ -6,7 +7,9 @@ var port = process.env.PORT || 3000;
 var xss = require("xss");
 require("dotenv").config();
 
-app.use(basicAuth(process.env.USERNAME, process.env.PASSWORD));
+//app.use(basicAuth(process.env.USERNAME, process.env.PASSWORD));
+
+app.use(express.static("public"));
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/index.html");
