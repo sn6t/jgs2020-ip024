@@ -1,15 +1,11 @@
 const socket = io();
 
-/*
-const class_thumbs_up_button = document.querySelector('.thumbs_up_button');
-const class_question_button = document.querySelector('.question_button');
-*/
-// variables: chat message submit
+let class_thumbs_up_button = document.querySelector('.thumbs_up_button');
+let class_question_button = document.querySelector('.question_button');
+
 const id_form_message = document.querySelector('#form_message');
 const id_input_message = document.querySelector('#input_message');
-// variables: chat message received
 const id_messages = document.querySelector('#messages');
-// variables: 
 const id_speech_recognition = document.querySelector('#speech_recognition');
 const id_copy_messages = document.querySelector('#copy_messages');
 
@@ -92,7 +88,7 @@ socket.on('chat message', (data) => {
     li_style = '<li class="li_text">';
   }
   const chat_message_html = li_style + '(<span class="date">' + message_now.toLocaleDateString() + '&nbsp;' + message_now.toLocaleTimeString() + '</span>)&nbsp;<span class="from">' + from + '</span>&nbsp;<span class="message">' + data.msg + '</span>&nbsp;' + '<span class="thumbs"><button class="thumbs_up_style thumbs_up_button" data-id="' + data.nowid + '" title="Thumbs Up Button">&#x1f44d;</button><span class="tu_number_zero thumbsup_count" id="thumbsup_' + data.nowid + '">0</span></span>' + '<span class="question"><button class="question_style question_button" data-id="' + data.nowid + '" title="Question Button">&#x2753;</button><span class="qu_number_zero question_count" id="question_' + data.nowid + '">0</span></span></li>';
-  id_messages.append(chat_message_html);
+  id_messages.innerHTML += chat_message_html;
   if (button_hover == false && messages_hover == false) {
     window.scrollTo(0, document.body.scrollHeight);
   }
