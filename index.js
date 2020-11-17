@@ -1,38 +1,33 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-var basicAuth = require("basic-auth-connect");
-var http = require("http").Server(app);
-var io = require("socket.io")(http);
-var port = process.env.PORT || 3000;
-var xss = require("xss");
-require("dotenv").config();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const port = process.env.PORT || 3000;
+const xss = require('xss');
 
-//app.use(basicAuth(process.env.USERNAME, process.env.PASSWORD));
-
-app.use(express.static("public"));
-
-app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/index.html");
+app.use(express.static('public'));
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
 });
 
-io.on("connection", function (socket) {
-  socket.on("chat message", function (data) {
-    io.emit("chat message", {
+io.on('connection', (socket) => {
+  socket.on('chat message', (data) => {
+    io.emit('chat message', {
       from: data.from,
       msg: xss(data.msg),
       nowid: data.nowid,
     });
   });
 
-  socket.on("thumbs up", function (id) {
-    io.emit("thumbs up", xss(id));
+  socket.on('thumbs up', (thumbsupid) => {
+    io.emit('thumbs up', xss(thumbsupid));
   });
 
-  socket.on("question", function (id) {
-    io.emit("question", xss(id));
+  socket.on('question', (questionid) => {
+    io.emit('question', xss(questionid));
   });
 });
 
-http.listen(port, function () {
-  console.log("listening on *:" + port);
+http.listen(port, () => {
+  console.log('listening on *:' + port);
 });

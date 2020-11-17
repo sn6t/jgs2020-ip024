@@ -6,18 +6,17 @@
     <link rel="stylesheet" href="./style.css">
   </head>
   <body>
-    <button id="button" onclick="toggleStartStop()">
+    <button id="speech_recognition" onclick="toggleStartStop()">
       &#x23fa; Click to Speak (Only works in Google Chrome for Desktop)
     </button>
-    <button id="copy" onclick="clipboardCopy()" class="copy_button_default">
+    <button id="copy_messages" onclick="clipboardCopy()" class="copy_button_default">
       &#x1f5d2; Click to Copy Voice Text to Clipboard
     </button>
     <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" placeholder="Press enter key to send your message">
+    <form action="" id="form_message">
+      <input id="input_message" autocomplete="off" placeholder="Press enter key to send your message">
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script src="./script.js"></script>
   </body>
 </html>

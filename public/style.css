@@ -8,9 +8,10 @@ button {
     font-size: 16px;
   }
 
-#button, #copy, #copy_reaction {
+#speech_recognition, #copy_messages {
     padding: 5px 10px;
   }
+
 .rec {
     animation-name: pulse;
     animation-duration: 1.5s;
@@ -20,7 +21,7 @@ button {
     background-color: red;
   }
 
-.copy, .copy_reaction {
+.copy {
     animation-name: pulse;
     animation-duration: 1.5s;
     animation-iteration-count: 1;
@@ -47,7 +48,7 @@ form {
     width: 100%;
   }
 
-form input {
+form > input {
     font-size: 14px;
     border: 0;
     padding: 10px;
