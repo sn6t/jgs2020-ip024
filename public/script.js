@@ -1,8 +1,5 @@
 const socket = io();
 
-let class_thumbs_up_button = document.querySelector('.thumbs_up_button');
-let class_question_button = document.querySelector('.question_button');
-
 const id_form_message = document.querySelector('#form_message');
 const id_input_message = document.querySelector('#input_message');
 const id_messages = document.querySelector('#messages');
@@ -22,20 +19,6 @@ if (userAgent.indexOf('chrome') != -1) {
   reset();
   recognition.onend = reset;
 }
-
-/**
-class_thumbs_up_button.addEventListener('click', (event) => {
-  event.preventDefault();
-  const thumbsupid = class_thumbs_up_button.getAttribute('data-id');
-  socket.emit('thumbs up', thumbsupid);
-})
-
-class_question_button.addEventListener('click', (event) => {
-  event.preventDefault();
-  const questionid = class_question_button.getAttribute('data-id');
-  socket.emit('question', questionid);
-})
-*/
 
 id_copy_messages.addEventListener('click', (event) => {
   event.preventDefault();
@@ -87,8 +70,25 @@ socket.on('chat message', (data) => {
     from = '&#x1f4dd;';
     li_style = '<li class="li_text">';
   }
-  const chat_message_html = li_style + '(<span class="date">' + message_now.toLocaleDateString() + '&nbsp;' + message_now.toLocaleTimeString() + '</span>)&nbsp;<span class="from">' + from + '</span>&nbsp;<span class="message">' + data.msg + '</span>&nbsp;' + '<span class="thumbs"><button class="thumbs_up_style thumbs_up_button" data-id="' + data.nowid + '" title="Thumbs Up Button">&#x1f44d;</button><span class="tu_number_zero thumbsup_count" id="thumbsup_' + data.nowid + '">0</span></span>' + '<span class="question"><button class="question_style question_button" data-id="' + data.nowid + '" title="Question Button">&#x2753;</button><span class="qu_number_zero question_count" id="question_' + data.nowid + '">0</span></span></li>';
+  const chat_message_html = li_style + '(<span class="date">' + message_now.toLocaleDateString() + '&nbsp;' + message_now.toLocaleTimeString() + '</span>)&nbsp;<span class="from">' + from + '</span>&nbsp;<span class="message">' + data.msg + '</span>&nbsp;' + '<span class="thumbs"><button class="thumbs_up_style thumbs_up_button" thumbsup-id="' + data.nowid + '" id="' + 'tu_button_' + data.nowid + '" title="Thumbs Up Button">&#x1f44d;</button><span class="tu_number_zero thumbsup_count" id="thumbsup_' + data.nowid + '">0</span></span>' + '<span class="question"><button class="question_style question_button" question-id="' + data.nowid + '" title="Question Button">&#x2753;</button><span class="qu_number_zero question_count" id="question_' + data.nowid + '">0</span></span></li>';
   id_messages.innerHTML += chat_message_html;
+
+  const id_thumbs_up_button = document.querySelector('#tu_button_' + data.nowid);
+  //const id_question_button = document.querySelector('button[question-id=' + data.nowid + ']');
+
+  id_thumbs_up_button.addEventListener('click', (event) => {
+    event.preventDefault();
+    const thumbsupid = id_thumbs_up_button.getAttribute('thumbsup-id');
+    socket.emit('thumbs up', thumbsupid);
+  })
+/*
+  id_question_button.addEventListener('click', (event) => {
+    event.preventDefault();
+    const questionid = class_question_button.getAttribute('question-id');
+    socket.emit('question', questionid);
+  })
+  */
+
   if (button_hover == false && messages_hover == false) {
     window.scrollTo(0, document.body.scrollHeight);
   }
@@ -96,16 +96,16 @@ socket.on('chat message', (data) => {
 
 // thumbs up received
 socket.on('thumbs up', (thumbsupid) => {
-  const id_thumbsupid = document.querySelector('#' + thumbsupid);
-  let counter = parseInt(id_thumbsupid.value);
+  const id_thumbsupid = document.querySelector('#thumbsup_' + thumbsupid);
+  let counter = parseInt(id_thumbsupid.textContent);
   counter = counter + 1;
-  id_thumbsupid.value = counter.toString();
+  id_thumbsupid.textContent = counter.toString();
   id_thumbsupid.setAttribute('class', 'thumbs_up_mtone');
 })
 
 // question received
 socket.on('question', (questionid) => {
-  const id_questionid = document.querySelector('#' + questionid);
+  const id_questionid = document.querySelector('#question_' + questionid);
   let counter = parseInt(id_questionid.value);
   counter = counter + 1;
   id_questionid.value = counter.toString();
