@@ -21,6 +21,11 @@ button {
     background-color: red;
   }
 
+.playable {
+    color: black;
+    background-color: white;
+  }
+
 .copy {
     animation-name: pulse;
     animation-duration: 1.5s;

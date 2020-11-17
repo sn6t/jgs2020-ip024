@@ -13,18 +13,37 @@ let recognition;
 
 const userAgent = window.navigator.userAgent.toLowerCase();
 
+const toggleStartStop = () => {
+  if (recognizing) {
+    recognition.stop();
+    reset();
+  } else {
+    recognition.start();
+    recognizing = true;
+    id_speech_recognition.innerHTML = '&#x23f9; Click to Stop (Only works in Google Chrome for Desktop)';
+    id_speech_recognition.removeAttribute('class', 'playable');
+    id_speech_recognition.setAttribute('class', 'rec');
+  }
+}
+
 const reset = () => {
   recognizing = false;
   id_speech_recognition.innerHTML = '&#x23fa; Click to Speak (Only works in Google Chrome for Desktop)';
   id_speech_recognition.removeAttribute('class', 'rec');
+  id_speech_recognition.setAttribute('class', 'playable');
+  id_speech_recognition.disabled = false;
 }
 
 if (userAgent.indexOf('chrome') !== -1) {
-  recognition = new webkitSpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  reset();
-  recognition.onend = reset;
+  if (userAgent.indexOf('edge') === -1) {
+    if (userAgent.indexOf('edg') === -1) {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      reset();
+      recognition.onend = reset;
+    }
+  }
 }
 
 id_copy_messages.addEventListener('click', (event) => {
@@ -129,48 +148,39 @@ socket.on('question', (questionid) => {
 })
 
 // speech recognition result received
-if (userAgent.indexOf("chrome") !== -1) {
-  recognition.onresult = (event) => {
-    let final = '';
-    const last_result = event.results.length - 1;
-    for (let i = 0; i < event.results.length; ++i) {
-      if (event.results[last_result].isFinal) {
-        final = event.results[last_result][0].transcript;
-      }
+if (userAgent.indexOf('chrome') !== -1) {
+  if (userAgent.indexOf('edge') === -1) {
+    if (userAgent.indexOf('edg') === -1) {
+      recognition.onresult = (event) => {
+        let final = '';
+        const last_result = event.results.length - 1;
+        for (let i = 0; i < event.results.length; ++i) {
+          if (event.results[last_result].isFinal) {
+            final = event.results[last_result][0].transcript;
+          }
+        }
+        final = final.trim();
+        if (final !== '') {
+          final = final.charAt(0).toUpperCase() + final.slice(1);
+          const now_id = Date.now();
+          socket.emit('chat message', {
+            from: 'voice',
+            msg: final,
+            nowid: now_id,
+          });
+          final = '';
+        }
+      };
+      
+      recognition.onend = (event) => {
+        // Once Click to Speak is fired, keep microphone working until manually stopping
+        if (recognizing) {
+          recognition.start();
+        }
+      };
     }
-    final = final.trim();
-    if (final !== '') {
-      final = final.charAt(0).toUpperCase() + final.slice(1);
-      const now_id = Date.now();
-      socket.emit('chat message', {
-        from: 'voice',
-        msg: final,
-        nowid: now_id,
-      });
-      final = '';
-    }
-  };
-
-  recognition.onend = (event) => {
-    // Once Click to Speak is fired, keep microphone working until manually stopping
-    if (recognizing) {
-      recognition.start();
-    }
-  };
-}
-
-const toggleStartStop = () => {
-  if (recognizing) {
-    recognition.stop();
-    reset();
-  } else {
-    recognition.start();
-    recognizing = true;
-    id_speech_recognition.innerHTML = '&#x23f9; Click to Stop (Only works in Google Chrome for Desktop)';
-    id_speech_recognition.setAttribute('class', 'rec');
   }
 }
-
 
 // copy all messages to clipboard
 const clipboardCopy = () => {
@@ -194,14 +204,12 @@ const clipboardCopy = () => {
   invisible_textarea.parentElement.removeChild(invisible_textarea);
 }
 
-// copy button is click
+// copy button functions
 const copybutton = document.querySelector('#copy_messages');
-
 const setCopyButtonStyle = () => {
   copybutton.disabled = true;
   copybutton.setAttribute('class', 'copy_button_clicked');
 }
-
 const clearCopyButtonStyle = () => {
   copybutton.disabled = false;
   copybutton.setAttribute('class', 'copy_button_default');
