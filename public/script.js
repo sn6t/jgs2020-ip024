@@ -8,12 +8,19 @@ const id_copy_messages = document.querySelector('#copy_messages');
 
 let button_hover = false;
 let messages_hover = false;
+let recognizing;
+let recognition;
 
 const userAgent = window.navigator.userAgent.toLowerCase();
 
-if (userAgent.indexOf('chrome') != -1) {
-  let recognizing = false;
-  const recognition = new webkitSpeechRecognition();
+const reset = () => {
+  recognizing = false;
+  id_speech_recognition.innerHTML = '&#x23fa; Click to Speak (Only works in Google Chrome for Desktop)';
+  id_speech_recognition.removeAttribute('class', 'rec');
+}
+
+if (userAgent.indexOf('chrome') !== -1) {
+  recognition = new webkitSpeechRecognition();
   recognition.continuous = true;
   recognition.interimResults = true;
   reset();
@@ -23,7 +30,7 @@ if (userAgent.indexOf('chrome') != -1) {
 id_copy_messages.addEventListener('click', (event) => {
   event.preventDefault();
   setCopyButtonStyle();
-  const timeoutID = window.setTimeout(clearCopyButtonStyle, 500);
+  window.setTimeout(clearCopyButtonStyle, 500);
 })
 
 id_copy_messages.addEventListener('mouseenter', (event) => {
@@ -49,13 +56,15 @@ id_messages.addEventListener('mouseleave', (event) => {
 // chat message submit event lister
 id_form_message.addEventListener('submit', (event) => {
   event.preventDefault();
-  const now_id = Date.now();
-  socket.emit('chat message', {
-    from: 'text',
-    msg: id_input_message.value,
-    nowid: now_id,
-  });
-  id_input_message.value = '';
+  if (id_input_message.value !== ''){
+    const now_id = Date.now();
+    socket.emit('chat message', {
+      from: 'text',
+      msg: id_input_message.value,
+      nowid: now_id,
+    });
+    id_input_message.value = '';
+  }
 });
 
 // chat message received
@@ -63,31 +72,34 @@ socket.on('chat message', (data) => {
   const message_now = new Date();
   let from = '';
   let li_style = '';
-  if ( data.form === 'voice') {
+  if ( data.from === 'voice') {
     from = '&#x1f399;';
     li_style = '<li>';
   } else {
     from = '&#x1f4dd;';
     li_style = '<li class="li_text">';
   }
-  const chat_message_html = li_style + '(<span class="date">' + message_now.toLocaleDateString() + '&nbsp;' + message_now.toLocaleTimeString() + '</span>)&nbsp;<span class="from">' + from + '</span>&nbsp;<span class="message">' + data.msg + '</span>&nbsp;' + '<span class="thumbs"><button class="thumbs_up_style thumbs_up_button" thumbsup-id="' + data.nowid + '" id="' + 'tu_button_' + data.nowid + '" title="Thumbs Up Button">&#x1f44d;</button><span class="tu_number_zero thumbsup_count" id="thumbsup_' + data.nowid + '">0</span></span>' + '<span class="question"><button class="question_style question_button" question-id="' + data.nowid + '" title="Question Button">&#x2753;</button><span class="qu_number_zero question_count" id="question_' + data.nowid + '">0</span></span></li>';
+  const chat_message_html = li_style + '(<span class="date">' + message_now.toLocaleDateString() + '&nbsp;' + message_now.toLocaleTimeString() + '</span>)&nbsp;<span class="from">' + from + '</span>&nbsp;<span class="message">' + data.msg + '</span>&nbsp;' + '<span class="thumbs"><button class="thumbs_up_style thumbs_up_button" thumbsup-id="' + data.nowid + '" title="Thumbs Up Button">&#x1f44d;</button><span class="tu_number_zero thumbsup_count" id="thumbsup_' + data.nowid + '">0</span></span>' + '<span class="question"><button class="question_style question_button" question-id="' + data.nowid + '" title="Question Button">&#x2753;</button><span class="qu_number_zero question_count" id="question_' + data.nowid + '">0</span></span></li>';
   id_messages.innerHTML += chat_message_html;
 
-  const id_thumbs_up_button = document.querySelector('#tu_button_' + data.nowid);
-  //const id_question_button = document.querySelector('button[question-id=' + data.nowid + ']');
+  const thumbs_up_button_list = document.querySelectorAll('.thumbs_up_button');
+  const question_button_list = document.querySelectorAll('.question_button');
 
-  id_thumbs_up_button.addEventListener('click', (event) => {
-    event.preventDefault();
-    const thumbsupid = id_thumbs_up_button.getAttribute('thumbsup-id');
-    socket.emit('thumbs up', thumbsupid);
+  thumbs_up_button_list.forEach( (thumbs_up_button) => {
+    thumbs_up_button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const thumbsupid = thumbs_up_button.getAttribute('thumbsup-id');
+      socket.emit('thumbs up', thumbsupid);
+    })
   })
-/*
-  id_question_button.addEventListener('click', (event) => {
-    event.preventDefault();
-    const questionid = class_question_button.getAttribute('question-id');
-    socket.emit('question', questionid);
+
+  question_button_list.forEach( (question_button) => {
+    question_button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const questionid = question_button.getAttribute('question-id');
+      socket.emit('question', questionid);
+    })
   })
-  */
 
   if (button_hover == false && messages_hover == false) {
     window.scrollTo(0, document.body.scrollHeight);
@@ -97,28 +109,34 @@ socket.on('chat message', (data) => {
 // thumbs up received
 socket.on('thumbs up', (thumbsupid) => {
   const id_thumbsupid = document.querySelector('#thumbsup_' + thumbsupid);
-  let counter = parseInt(id_thumbsupid.textContent);
+  let counter = parseInt(id_thumbsupid.innerText);
   counter = counter + 1;
-  id_thumbsupid.textContent = counter.toString();
-  id_thumbsupid.setAttribute('class', 'thumbs_up_mtone');
+  id_thumbsupid.innerText = counter.toString();
+  if (counter === 1) {
+    id_thumbsupid.setAttribute('class', 'thumbs_up_mtone');
+  }
 })
 
 // question received
 socket.on('question', (questionid) => {
   const id_questionid = document.querySelector('#question_' + questionid);
-  let counter = parseInt(id_questionid.value);
+  let counter = parseInt(id_questionid.innerText);
   counter = counter + 1;
-  id_questionid.value = counter.toString();
-  id_questionid.setAttribute('class', 'question_mtone');
+  id_questionid.innerText = counter.toString();
+  if (counter === 1) {
+    id_questionid.setAttribute('class', 'question_mtone');
+  }
 })
 
 // speech recognition result received
-if (userAgent.indexOf("chrome") != -1) {
+if (userAgent.indexOf("chrome") !== -1) {
   recognition.onresult = (event) => {
     let final = '';
     const last_result = event.results.length - 1;
-    if (event.results[last_result].isFinal) {
-      final = event.results[last_result][0].transcript;
+    for (let i = 0; i < event.results.length; ++i) {
+      if (event.results[last_result].isFinal) {
+        final = event.results[last_result][0].transcript;
+      }
     }
     final = final.trim();
     if (final !== '') {
@@ -141,12 +159,6 @@ if (userAgent.indexOf("chrome") != -1) {
   };
 }
 
-const reset = () => {
-  recognizing = false;
-  id_speech_recognition.value = '&#x23fa; Click to Speak (Only works in Google Chrome for Desktop)';
-  id_speech_recognition.removeAttribute('class', 'rec');
-}
-
 const toggleStartStop = () => {
   if (recognizing) {
     recognition.stop();
@@ -154,17 +166,16 @@ const toggleStartStop = () => {
   } else {
     recognition.start();
     recognizing = true;
-    id_speech_recognition.value = '&#x23f9; Click to Stop (Only works in Google Chrome for Desktop)';
+    id_speech_recognition.innerHTML = '&#x23f9; Click to Stop (Only works in Google Chrome for Desktop)';
     id_speech_recognition.setAttribute('class', 'rec');
   }
 }
 
 
-
 // copy all messages to clipboard
 const clipboardCopy = () => {
   // copy all messages with date data to a copytext variable
-  let copytext = "";
+  let copytext = '';
   const datelist = document.querySelectorAll('.date');
   const fromlist = document.querySelectorAll('.from');
   const messagelist = document.querySelectorAll('.message');
@@ -185,12 +196,12 @@ const clipboardCopy = () => {
 
 // copy button is click
 const copybutton = document.querySelector('#copy_messages');
+
 const setCopyButtonStyle = () => {
   copybutton.disabled = true;
   copybutton.setAttribute('class', 'copy_button_clicked');
 }
 
-// clear copy button style
 const clearCopyButtonStyle = () => {
   copybutton.disabled = false;
   copybutton.setAttribute('class', 'copy_button_default');
