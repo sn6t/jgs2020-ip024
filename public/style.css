@@ -1,37 +1,76 @@
 * {
+    box-sizing: border-box;
+    font-family: 'ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','ヒラギノ角ゴ W3', 'メイリオ', system-ui;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-  }
+}
 
 button {
     font-size: 16px;
-  }
+}
 
-#speech_recognition, #copy_messages {
-    padding: 5px 10px;
-  }
+form {
+    background: black;
+    bottom: 0;
+    padding: 3px;
+    position: fixed;
+    width: 100%;
+}
 
+form > input {
+    border: 0;
+    font-size: 14px;
+    margin-right: 0.5%;
+    padding: 10px;
+    width: 100%;
+}
+
+.copy {
+    animation-duration: 1.5s;
+    animation-iteration-count: 1;
+    animation-name: pulse;
+    animation-timing-function: linear;
+}
+
+.copy_button_clicked {
+    background-color: red;
+    color: white;
+}
+
+.copy_button_default, .playable {
+    background-color: white;
+    color: black; 
+}
+  
 .rec {
     animation-name: pulse;
     animation-duration: 1.5s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
-    color: white;
     background-color: red;
-  }
+    color: white;
+}
 
-.playable {
-    color: black;
-    background-color: white;
-  }
+.thumbs_up_style, .question_style:hover {
+    background-color: Transparent;
+    border-style: none;
+    filter: grayscale(0%);
+}
 
-.copy {
-    animation-name: pulse;
-    animation-duration: 1.5s;
-    animation-iteration-count: 1;
-    animation-timing-function: linear;
-  }
+.thumbs_up_style:hover, .question_style {
+    background-color: Transparent;
+    border-style: none;
+    filter: grayscale(100%);}
+
+
+.thumbs_up_mtone, .question_mtone {
+    color: red;
+    font-weight: bold;
+}
+
+.tu_number_zero, .qu_number_zero {
+    color: gray;
+}
 
 @keyframes pulse {
     0% {
@@ -43,89 +82,29 @@ button {
     90% {
       box-shadow: 0px 0px 3px 4px rgba(173, 0, 0, 0);
     }
-  }
-
-form {
-    background: #000;
-    padding: 3px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-  }
-
-form > input {
-    font-size: 14px;
-    border: 0;
-    padding: 10px;
-    width: 100%;
-    margin-right: 0.5%;
-  }
+}
 
 #messages {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
+    margin-bottom: 40px;
+}
 
 #messages li {
     padding: 5px 10px;
-  }
+}
 
 #messages li:nth-child(odd) {
-    background: #eee;
+    background: #eeeeee;
 }
 
 #messages .li_text {
-  background: #bee9f7;
+    background: #bee9f7;
 }
 
 #messages .li_text:nth-child(odd) {
-  background: #add8e6;
+    background: #add8e6;
 }
 
-#messages {
-    margin-bottom: 40px;
-  }
-
-.thumbs_up_style {
-    background-color: Transparent;
-    filter: grayscale(100%);
-    border-style: none;
-  }
-
-.thumbs_up_style:hover {
-    background-color: Transparent;
-    filter: grayscale(0%);
-    border-style: none;
-  }
-
-.question_style {
-    background-color: Transparent;
-    filter: grayscale(100%);
-    border-style: none;
-  }
-
-.question_style:hover {
-    background-color: Transparent;
-    filter: grayscale(0%);
-    border-style: none;
-  }
-
-.qu_number_zero, .tu_number_zero {
-    color: gray;
-}
-
-.copy_button_default {
-  color: black; 
-  background-color: white;
-}
-
-.copy_button_clicked {
-  color: white;
-  background-color: red;
-}
-
-.thumbs_up_mtone, .question_mtone {
-  color: red;
-  font-weight: bold;
+#speech_recognition, #copy_messages {
+    padding: 5px 10px;
 }

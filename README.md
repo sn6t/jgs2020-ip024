@@ -17,13 +17,7 @@
 
 Node.js が利用可能であること、Git が利用可能であることが前提です。その他の基本的な手順の説明は割愛します。
 
-.env.sample を.env にファイル名変更してください。.env には、Basic 認証の ID とパスワードが記載されています。任意で変更してください。
-
-```
-mv .env.sample .env
-```
-
-（オプション）IBM Cloud の Cloud Foundry Public にデプロイする場合は、manifest.yml.sample を manifest.yml にファイル名変更し、内容を適宜カスタマイズしてください。
+（オプション）IBM Cloud の Cloud Foundry Public にデプロイする場合は、manifest.yml の内容を適宜カスタマイズしてください。
 
 ## 注意事項
 
