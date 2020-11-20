@@ -1,6 +1,6 @@
 # JGS 2020 IP-024セミナーアシスト
 
-<img src="https://user-images.githubusercontent.com/23325882/86427041-21194d00-bd24-11ea-8480-11e34c0ca1fe.gif" alt="Meeting Police Screen Image" width="576" height="360">
+<img src="https://user-images.githubusercontent.com/23325882/86427041-21194d00-bd24-11ea-8480-11e34c0ca1fe.gif" alt="JGS Seminar Assist Screen Image" width="576" height="360">
 
 ## 概要
 
@@ -10,14 +10,10 @@
 
 ## 説明
 
-- 音声認識技術は、[Web Speech API](https://developer.mozilla.org/ja/docs/Web/API/Web_Speech_API)を使用しています。Web Speech APIは、現時点ではGoogle Chromeブラウザでのみサポートされているため、それ以外のブラウザでは音声認識機能は利用できません。Google Chromeブラウザはデスクトップ版でのみ動作検証を行っており、モバイル版では動作検証は行っておりません。**音声認識させたい講師は、Google Chromeがインストールされて、マイク等で音声入力が可能なPCを使用してください**。音声認識機能を利用しない場合は、Google Chrome以外の主要ブラウザでも利用可能です。
+- 音声認識技術は、[Web Speech API](https://developer.mozilla.org/ja/docs/Web/API/Web_Speech_API)を使用しています。Web Speech APIは、現時点ではGoogle Chromeブラウザでのみサポートされているため、それ以外のブラウザでは音声認識機能は利用できません。Google Chromeブラウザはデスクトップ版でのみ動作検証を行っており、モバイル版では動作検証は行っておりません。**音声認識させたい講師は、Google Chromeがインストールされて、マイク等で音声入力が可能なPCを使用してください**。音声認識機能を利用しない場合は、Google Chrome以外の主要ブラウザでも利用可能です（すべてのブラウザで動作確認をしているわけではありません）。
 - 講師が発話した内容の音声テキスト、おもしろいボタンやわからないボタンのクリック情報、チャットボックスに入力したテキストは、[Node.js](https://nodejs.org/ja/)の[Socket.IO](https://socket.io/)モジュールを使用して、リアルタイムに共有（アプリケーションを表示している全員に対してブロードキャスト）されます。**アプリケーションは、講師および受講者が参照可能なWebアプリケーション・サーバーで動作させてください**。私たちのタスクでは、IBM Cloudの[Cloud Foundry Public](https://www.ibm.com/jp-ja/cloud/cloud-foundry)でアプリケーションを動作させました。
 - 画面に出力された音声テキストやチャットメッセージとその投稿日時、おもしろいボタンやわからないボタンが実行された回数は、クリップボードにCSV形式でコピーすることが出来ます（Click to Copy Voice Text to Clipboardボタンでコピー）。ログを残したい場合はご利用ください。画面に出力されているHTML情報を取得しているだけですので、自分が画面を表示する前のログを遡って取得することは出来ません。
-- 現在のアプリケーションは[Heroku](https://jp.heroku.com/)でホスティングされており、このリポジトリにコミットしたコードはHerokuに自動的にデプロイされます。無料枠で動かしている都合上、一定期間アクセスがないとスリープ状態となり、初回アクセス時だけ画面が開くのが遅いといった制約等があります。
-
-## 使用手順
-
-Node.jsが利用可能であること。その他の基本的な手順の説明は割愛します。
+- デモ用にアプリケーションは[Heroku](https://jp.heroku.com/)でホスティングしており、このリポジトリにコミットしたコードはHerokuに自動的にデプロイされます。無料枠で動かしている都合上、一定期間アクセスがないとスリープ状態となり、初回アクセス時だけ画面が開くのが遅い、コード内に認証認可制御を入れていないので、同時に複数の方が利用されると音声認識結果や質問等が意図せず混ざってしまう等の利用上の制約がありますが、どのようなアプリかは[こちらのURL](https://jgs2020-ip024.herokuapp.com/)でご確認いただけます。
 
 ## 注意事項
 

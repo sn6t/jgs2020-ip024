@@ -47,6 +47,16 @@ if (userAgent.indexOf('chrome') !== -1) {
   }
 }
 
+id_speech_recognition.addEventListener('mouseenter', (event) => {
+  event.preventDefault();
+  button_hover = true;
+})
+
+id_speech_recognition.addEventListener('mouseleave', (event) => {
+  event.preventDefault();
+  button_hover = false;
+})
+
 id_copy_messages.addEventListener('click', (event) => {
   event.preventDefault();
   setCopyButtonStyle();
@@ -122,7 +132,7 @@ socket.on('chat message', (data) => {
     })
   })
 
-  if (button_hover == false && messages_hover == false) {
+  if (button_hover === false && messages_hover === false) {
     window.scrollTo(0, document.body.scrollHeight);
   }
 })
