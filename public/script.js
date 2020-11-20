@@ -144,7 +144,7 @@ socket.on('thumbs up', (thumbsupid) => {
   counter = counter + 1;
   id_thumbsupid.innerText = counter.toString();
   if (counter === 1) {
-    id_thumbsupid.setAttribute('class', 'thumbs_up_mtone');
+    id_thumbsupid.setAttribute('class', 'thumbs_up_mtone thumbsup_count');
   }
 })
 
@@ -155,7 +155,7 @@ socket.on('question', (questionid) => {
   counter = counter + 1;
   id_questionid.innerText = counter.toString();
   if (counter === 1) {
-    id_questionid.setAttribute('class', 'question_mtone');
+    id_questionid.setAttribute('class', 'question_mtone question_count');
   }
 })
 
